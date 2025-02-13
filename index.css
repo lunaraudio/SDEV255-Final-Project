@@ -1,0 +1,49 @@
+nav{
+    font-size: 1.2em ;
+    text-align: center;
+    background-color:#FFFFFF;
+    }
+
+    /* Basic styling for the body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar container box with light blue background */
+nav {
+    background-color: #ADD8E6; /* Light blue background */
+    padding: 10px; /* Space inside the box */
+    border-radius: 8px; /* Optional: Rounded corners for the box */
+    margin: 20px; /* Optional: Space outside the box */
+}
+
+/* Style the navbar list */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+/* Style for each list item */
+nav li {
+    display: inline;
+}
+
+/* Navbar links */
+nav a {
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Hover effect for links */
+nav a:hover {
+    background-color: #ddd;
+    color: black;
+}

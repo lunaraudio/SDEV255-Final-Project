@@ -19,4 +19,4 @@ return new Courses.constructor(x,y,z,a,)
 }
 
 let classes = {}; 
-class.push(newClass)
+classes.push(newClass)

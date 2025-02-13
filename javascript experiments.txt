@@ -1,0 +1,22 @@
+class Courses{
+name;
+description;
+subject;
+credits;
+
+
+constructor(name, description,subject,credits){
+   this.name = name;
+   this.description = description;
+   this.subject = subject;
+   this.credits = credits;
+}
+}
+
+function newClass();{
+// needs four html inupts for the new class to be made
+return new Courses.constructor(x,y,z,a,)
+}
+
+let classes = {}; 
+class.push(newClass)

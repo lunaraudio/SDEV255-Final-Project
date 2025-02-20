@@ -55,3 +55,26 @@ router.post("/classes", async function(req, res) {
 app.use("/api", router);
 
 app.listen(3000);
+
+
+
+I do no know were this part goes
+
+router.put("/:id", async function(req, res) {
+   // Song to update sent in body of request
+   const classes = req.body;
+
+   try {
+      // Replace existing song fields with updated song
+      const result = await Class.updateOne({ _id: req.params.id }, classes);
+      if (result.matchedCount === 0) {
+         res.sendStatus(404);
+      } 
+      else {
+         res.sendStatus(204);
+      }
+   }
+   catch (ex) {
+      res.status(400).send(ex.message);
+   }
+});

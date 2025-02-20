@@ -1,0 +1,57 @@
+models/classes.js
+
+const db = require("../db");
+
+const Class = db.model("classes", {
+   name:       { type: String, required: true },
+   description:      String,
+   subject:      String,
+   credits:  { type: Number, min: 1, max: 5 },
+});
+
+module.exports = Classes;
+
+db.js
+
+const mongoose = require("mongoose");
+mongoose.connect("mongodb://localhost/classesdb");
+module.exports = mongoose;
+
+server.js
+
+const express = require("express");
+const Song = require("./models/classes");
+
+const app = express();
+
+// Middleware that parses HTTP requests with JSON body
+app.use(express.json());
+
+const router = express.Router();
+
+// Get list of all songs in the database
+router.get("/classes", async function(req, res) {
+   try {
+      const classes = await Class.find();
+      res.json(classes);
+   }
+   catch (ex) {
+      res.status(400).send(ex.message);
+   }
+});
+
+// Add a new song to the database
+router.post("/classes", async function(req, res) {
+   try {
+      const song = new Class(req.body);
+      await song.save();
+      res.status(201).json(classes);
+   }
+   catch (ex) {
+      res.status(400).send(ex.message);
+   }
+});
+
+app.use("/api", router);
+
+app.listen(3000);

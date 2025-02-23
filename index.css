@@ -24,7 +24,7 @@ nav {
 /* for the button size and positioning */
 
 html, body {
-    height: 100%;            /* Ensure the body takes up full viewport height */
+    height: 50%;            /* Ensure the body takes up full viewport height */
     margin: 0;               /* Remove default margin */
     display: flex;           /* Use flexbox layout */
     justify-content: center; /* Center horizontally */
@@ -35,7 +35,8 @@ html, body {
     font-size: 1em;         /* Increase the font size 2 times */
     padding: 1em 2em;    /* Adjust padding to keep the button proportional */
   }
-  
+
+
 
 /* Style the navbar list */
 nav ul {
@@ -70,7 +71,7 @@ body, html {
 	margin: 0;
 	padding: 0;
 	height: 100%;
-	background: #6a62d2 !important;
+	background: #62d27c !important;
 	color: #262626;
 }
 .form-area {
@@ -126,4 +127,10 @@ a {
 }
 .custom-checkbox .custom-control-input:checked~.custom-control-label::before {
 	background-color: #c0392b !important;
+}
+
+
+item{
+  Text-align: center
+  
 }

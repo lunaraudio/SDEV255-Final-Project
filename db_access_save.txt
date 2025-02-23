@@ -29,7 +29,7 @@ app.use(express.json());
 
 const router = express.Router();
 
-// Get list of all songs in the database
+// Get list of all classes in the database
 router.get("/classes", async function(req, res) {
    try {
       const classes = await Class.find();
@@ -40,7 +40,7 @@ router.get("/classes", async function(req, res) {
    }
 });
 
-// Add a new song to the database
+// Add a new class to the database
 router.post("/classes", async function(req, res) {
    try {
       const song = new Class(req.body);
@@ -56,16 +56,12 @@ app.use("/api", router);
 
 app.listen(3000);
 
-
-
-I do no know were this part goes
-
 router.put("/:id", async function(req, res) {
-   // Song to update sent in body of request
+   // class to update sent in body of request
    const classes = req.body;
 
    try {
-      // Replace existing song fields with updated song
+      // Replace existing class fields with updated class
       const result = await Class.updateOne({ _id: req.params.id }, classes);
       if (result.matchedCount === 0) {
          res.sendStatus(404);

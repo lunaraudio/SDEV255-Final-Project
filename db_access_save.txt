@@ -40,7 +40,7 @@ router.get("/classes", async function(req, res) {
    }
 });
 
-// Add a new class to the database
+// Add a new class to the database ?
 router.post("/classes", async function(req, res) {
    try {
       const song = new Class(req.body);
@@ -74,3 +74,38 @@ router.put("/:id", async function(req, res) {
       res.status(400).send(ex.message);
    }
 });
+
+
+
+EXAMPLE OF WHAT TO DO NEEDS MODIFICATION. 
+
+
+const express = require("express");
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost/mydb");
+
+const studentSchema = new mongoose.Schema({
+   name:          { type: String, required: true },
+   gpa:           { type: Number, min: 0, max: 4 },
+   birthDate: { type: Date, default: Date.now },
+   interests: [ String ]
+});
+
+const Student = mongoose.model("Student", studentSchema);
+
+const app = express();
+
+app.get("/create", async function(req, res) {
+   const stu = new Student({
+      name: "Sue Black",
+      gpa: 3.1,
+      birthDate: "2006-11-02",
+      interests: ["biking", "reading"]
+   });
+
+   await stu.save();
+   res.send(`Saved ${stu.name}.`); 
+});
+
+app.listen(3000);

@@ -1,0 +1,136 @@
+nav{
+    font-size: 1.2em ;
+    text-align: center;
+    background-color:#FFFFFF;
+    position:fixed;
+    top: 0;
+    }
+
+    /* Basic styling for the body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar container box with light blue background */
+nav {
+    background-color: #ADD8E6; /* Light blue background */
+    padding: 10px; /* Space inside the box */
+    border-radius: 8px; /* Optional: Rounded corners for the box */
+    margin: 20px; /* Optional: Space outside the box */
+}
+
+/* for the button size and positioning */
+
+html, body {
+    height: 50%;            /* Ensure the body takes up full viewport height */
+    margin: 0;               /* Remove default margin */
+    display: flex;           /* Use flexbox layout */
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+  }
+  
+.btn {
+    font-size: 1em;         /* Increase the font size 2 times */
+    padding: 1em 2em;    /* Adjust padding to keep the button proportional */
+  }
+
+
+
+/* Style the navbar list */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+/* Style for each list item */
+nav li {
+    display: inline;
+}
+
+/* Navbar links */
+nav a {
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Hover effect for links */
+nav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+body, html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	background: #62d27c !important;
+	color: #262626;
+}
+.form-area {
+	height: 400px;
+	width: 350px;
+	margin-top: auto;
+	margin-bottom: auto;
+	background: #fff;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	padding: 10px;
+	box-shadow: 15px 15px 20px 0px rgba(0, 0, 0, 0.3);
+	border-radius: 30px;
+}
+a {
+	color: #acacac;
+}
+.form-area h2 {
+	color: #262626;
+	font-family: lato;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 20px;
+}
+.form_container {
+	margin-top: 30px;
+}
+.login_btn {
+	width: 100%;
+	background: deeppink !important;
+	color: #fff !important;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+.login_btn:focus {
+	box-shadow: none !important;
+	outline: 0px !important;
+}
+.login_container {
+	padding: 5 2rem;
+}
+.input-group-text {
+	background: deeppink !important;
+	color: white !important;
+	border: 0 !important;
+	border-radius: 0.25rem 0 0 0.25rem !important;
+}
+.input_user, .input_pass:focus {
+	box-shadow: none !important;
+	outline: 0px !important;
+}
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+	background-color: #c0392b !important;
+}
+
+
+item{
+  Text-align: center
+  
+}

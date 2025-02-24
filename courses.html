@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <title>Document</title>
+</head>
+<body>
+    <nav>
+        <ul>
+             <li><a href="index.html">Home</a> </li>
+             <li><a href="student.html">Student log in</a> </li>
+             <li><a href="teacher.html">Teacher log in</a> </li>
+         </ul>
+    </nav>
+    
+    <!-- Course Management Section -->
+    <h1>Course Management</h1>
+    <form id="course-form">
+        <input type="text" id="course-name" placeholder="Course Name" required>
+        <input type="text" id="course-description" placeholder="Course Description" required>
+        <input type="text" id="course-teacher" placeholder="Teacher Name" required>
+        <input type="number" id="course-credits" placeholder="Credits" required>
+        <button type="submit">Add Course</button>
+    </form>
+    <ul id="course-list"></ul>
+
+    <script src="index.js"></script>
+</body>
+</html>

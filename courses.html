@@ -14,11 +14,18 @@
              <li><a href="teacher.html">Teacher log in</a> </li>
          </ul>
     </nav>
-    <!-- login in window for students to enter in their login information-->
-
-
-    <!-- the login button for after the student enters in their login info-->
-     <button class="btn btn-lg btn">Login</button>
     
+    <!-- Course Management Section -->
+    <h1>Course Management</h1>
+    <form id="course-form">
+        <input type="text" id="course-name" placeholder="Course Name" required>
+        <input type="text" id="course-description" placeholder="Course Description" required>
+        <input type="text" id="course-teacher" placeholder="Teacher Name" required>
+        <input type="number" id="course-credits" placeholder="Credits" required>
+        <button type="submit">Add Course</button>
+    </form>
+    <ul id="course-list"></ul>
+
+    <script src="index.js"></script>
 </body>
 </html>

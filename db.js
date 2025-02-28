@@ -1,3 +1,41 @@
-const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/classesdb");
+const mongoose = require('mongoose')
+
+
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://norwayfdf:khsrk@coursesdb.3qlr5.mongodb.net/?retryWrites=true&w=majority&appName=CoursesDB";
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Successfully connected to MongoDB!");
+  })
+  .catch((err) => {
+    console.error("Connection error", err);
+  });
+
+run().catch(console.dir);
 module.exports = mongoose;

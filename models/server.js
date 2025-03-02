@@ -3,7 +3,7 @@ var cors = require('cors')
 
 const server = express()
 const bodyParser = require('body-parser')
-const course = require("./models/courses")
+const course = require("./courses")
 server.use(cors())
 
 // Middleware that parses HTTP requests with JSON body
@@ -59,6 +59,14 @@ router.put("/:id", async function(req, res) {
    }
 })
 
+router.delete("/courses/:id", async (req, res) => {
+   try {
+      await course.deleteOne({ _id: req.params.id })
+      res.sendStatus(204)
+   } catch (err) {
+      res.status(400).send(err)
+   }
+})
 // Use the router for API routes
 server.use("/api", router)
 

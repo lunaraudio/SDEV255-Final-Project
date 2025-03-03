@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <title>Teacher Page</title>
+    <style>
+        .course-list {
+            margin-top: 20px;
+        }
+        .course-item {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Teacher Page</h1>
+    <form id="courseForm">
+        <label for="courseName">Course Name:</label>
+        <input type="text" id="courseName" name="courseName"><br><br>
+        <label for="courseCode">Course Code:</label>
+        <input type="text" id="courseCode" name="courseCode"><br><br>
+        <label for="courseDescription">Course Description:</label><br>
+        <textarea id="courseDescription" name="courseDescription" rows="4" cols="50"></textarea><br><br>
+        <input type="submit" value="Add Course">
+    </form>
+
+    <div class="course-list" id="courseList">
+        <h2>Courses</h2>
+        <!-- Courses will be listed here -->
+    </div>
+
+    <script>
+        let editMode = false;
+        let currentCourseItem = null;
+
+        document.getElementById('courseForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            if (editMode) {
+                updateCourse();
+            } else {
+                addCourse();
+            }
+        });
+
+        function addCourse() {
+            const courseName = document.getElementById('courseName').value;
+            const courseCode = document.getElementById('courseCode').value;
+            const courseDescription = document.getElementById('courseDescription').value;
+
+            const courseList = document.getElementById('courseList');
+            const courseItem = document.createElement('div');
+            courseItem.className = 'course-item';
+            courseItem.innerHTML = `
+                <strong>${courseName}</strong> (${courseCode})<br>
+                ${courseDescription}<br>
+                <button onclick="editCourse(this)">Edit</button>
+                <button onclick="deleteCourse(this)">Delete</button>
+            `;
+            courseList.appendChild(courseItem);
+
+            document.getElementById('courseForm').reset();
+        }
+
+        function editCourse(button) {
+            const courseItem = button.parentElement;
+            const courseName = courseItem.querySelector('strong').innerText;
+            const courseCode = courseItem.childNodes[1].nodeValue.trim().slice(1, -1);
+            const courseDescription = courseItem.childNodes[3].nodeValue.trim();
+
+            document.getElementById('courseName').value = courseName;
+            document.getElementById('courseCode').value = courseCode;
+            document.getElementById('courseDescription').value = courseDescription;
+
+            editMode = true;
+            currentCourseItem = courseItem;
+        }
+
+        function updateCourse() {
+            const courseName = document.getElementById('courseName').value;
+            const courseCode = document.getElementById('courseCode').value;
+            const courseDescription = document.getElementById('courseDescription').value;
+
+            currentCourseItem.innerHTML = `
+                <strong>${courseName}</strong> (${courseCode})<br>
+                ${courseDescription}<br>
+                <button onclick="editCourse(this)">Edit</button>
+                <button onclick="deleteCourse(this)">Delete</button>
+            `;
+
+            document.getElementById('courseForm').reset();
+            editMode = false;
+            currentCourseItem = null;
+        }
+
+        function deleteCourse(button) {
+            button.parentElement.remove();
+        }
+    </script>
+</body>
+</html>

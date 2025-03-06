@@ -16,7 +16,7 @@
     </nav>
 
 
-<!-- here is bootstrap code for the login inputs-->
+<!-- here is bootstrap code for the login inputs
 
 <div class="container h-100">
     <div class="container h-100">
@@ -63,7 +63,36 @@
         </div>
     </div>
 </div>
+-->
 
+    <form id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+        // Add an event listener to the form submission
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from actually submitting
+
+            // Get the username and password values (you can validate them here)
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Example validation (you should replace this with actual validation logic)
+            if (username === 'student' && password === 'password123') {
+                // If valid, redirect to the student_login.html page
+                window.location.href = 'student_login.html';
+            } else {
+                alert('Invalid username or password. Please try again.');
+            }
+        });
+    </script>
 
 
 

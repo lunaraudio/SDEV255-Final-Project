@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require("./db");
-const Course = require('./course'); // Adjust the path as needed
-const User = require('./user'); // Adjust the path as needed
+const Course = require('./models/courses'); // Adjust the path as needed
+const User = require('./models/user'); // Adjust the path as needed
 const jwt = require('jsonwebtoken');
 
 // Define the Course schema

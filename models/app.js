@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const Course = require('./models/course');
+const Course = require('./models/courses');
 const User = require('./models/user');
 
 // Initialize the app

@@ -19,13 +19,14 @@
     <ul id="available-courses">
         <!-- Courses will be dynamically populated here -->
     </ul>
-    <button onclick="enrollCourses()">Enroll in Selected Courses</button>
+    <button onclick="addToSchedule()">Add Selected Courses to Schedule</button>
 
     <h2>Your Schedule</h2>
     <ul id="student-schedule">
         <!-- Enrolled courses will be dynamically populated here -->
     </ul>
     <button onclick="dropCourses()">Drop Selected Courses</button>
+    <button onclick="submitSchedule()">Submit Schedule</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -54,68 +55,56 @@
         }
 
         function fetchSchedule() {
-            fetch('/courses/schedule', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                const scheduleList = document.getElementById('student-schedule');
-                scheduleList.innerHTML = '';
-                data.forEach(course => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<input type="checkbox" id="${course._id}" name="enrolledCourse" value="${course._id}">
-                                    <label for="${course._id}">${course.name}</label>`;
-                    scheduleList.appendChild(li);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching schedule:', error);
-                alert('Error fetching schedule: ' + error.message);
+            const scheduleCourses = JSON.parse(localStorage.getItem('schedule')) || [];
+            const scheduleList = document.getElementById('student-schedule');
+            scheduleList.innerHTML = '';
+            scheduleCourses.forEach(course => {
+                const li = document.createElement('li');
+                li.innerHTML = `<input type="checkbox" id="${course._id}" name="enrolledCourse" value="${course._id}">
+                                <label for="${course._id}">${course.name}</label>
+                                <button onclick="removeFromSchedule('${course._id}')">Remove</button>`;
+                scheduleList.appendChild(li);
             });
         }
 
-        function enrollCourses() {
-            const selectedCourses = Array.from(document.querySelectorAll('input[name="course"]:checked')).map(input => input.value);
-            selectedCourses.forEach(courseId => {
-                fetch(`/courses/enroll/${courseId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    fetchSchedule();
-                })
-                .catch(error => {
-                    console.error('Error enrolling in course:', error);
-                    alert('Error enrolling in course: ' + error.message);
-                });
+        function addToSchedule() {
+            const selectedCourses = Array.from(document.querySelectorAll('input[name="course"]:checked')).map(input => {
+                return {
+                    _id: input.value,
+                    name: input.nextElementSibling.textContent
+                };
             });
+            const scheduleCourses = JSON.parse(localStorage.getItem('schedule')) || [];
+            selectedCourses.forEach(course => {
+                if (!scheduleCourses.some(scheduleCourse => scheduleCourse._id === course._id)) {
+                    scheduleCourses.push(course);
+                }
+            });
+            localStorage.setItem('schedule', JSON.stringify(scheduleCourses));
+            alert('Courses added to your schedule');
+            fetchSchedule();
+        }
+
+        function removeFromSchedule(courseId) {
+            let scheduleCourses = JSON.parse(localStorage.getItem('schedule')) || [];
+            scheduleCourses = scheduleCourses.filter(course => course._id !== courseId);
+            localStorage.setItem('schedule', JSON.stringify(scheduleCourses));
+            alert('Course removed from your schedule');
+            fetchSchedule();
         }
 
         function dropCourses() {
             const selectedCourses = Array.from(document.querySelectorAll('input[name="enrolledCourse"]:checked')).map(input => input.value);
-            selectedCourses.forEach(courseId => {
-                fetch(`/courses/drop/${courseId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    fetchSchedule();
-                })
-                .catch(error => {
-                    console.error('Error dropping course:', error);
-                    alert('Error dropping course: ' + error.message);
-                });
-            });
+            let scheduleCourses = JSON.parse(localStorage.getItem('schedule')) || [];
+            scheduleCourses = scheduleCourses.filter(course => !selectedCourses.includes(course._id));
+            localStorage.setItem('schedule', JSON.stringify(scheduleCourses));
+            alert('Courses dropped from your schedule');
+            fetchSchedule();
+        }
+
+        function submitSchedule() {
+            const scheduleCourses = JSON.parse(localStorage.getItem('schedule')) || [];
+            alert('Schedule submitted: ' + scheduleCourses.map(course => course.name).join(', '));
         }
     </script>
 </body>

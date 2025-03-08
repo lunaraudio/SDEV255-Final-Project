@@ -40,28 +40,16 @@
         });
 
         function fetchCourses() {
-            fetch('/courses')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch courses');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const courseList = document.getElementById('teacher-courses');
-                    courseList.innerHTML = '';
-                    data.forEach(course => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `${course.name} 
-                                        <button onclick="editCourse('${course._id}')">Edit</button>
-                                        <button onclick="deleteCourse('${course._id}')">Delete</button>`;
-                        courseList.appendChild(li);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching courses:', error);
-                    alert('Error fetching courses: ' + error.message);
-                });
+            const courses = JSON.parse(localStorage.getItem('courses')) || [];
+            const courseList = document.getElementById('teacher-courses');
+            courseList.innerHTML = '';
+            courses.forEach((course, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `${course.name} 
+                                <button onclick="editCourse(${index})">Edit</button>
+                                <button onclick="deleteCourse(${index})">Delete</button>`;
+                courseList.appendChild(li);
+            });
         }
 
         function createCourse(event) {
@@ -71,60 +59,51 @@
                 name: formData.get('name'),
                 description: formData.get('description'),
                 subject: formData.get('subject'),
-                credits: formData.get('credits'),
-                createdBy: localStorage.getItem('userId') // Assuming you store the user ID in localStorage
+                credits: formData.get('credits')
             };
 
-            fetch('/courses', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify(courseData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to create course');
-                }
-                return response.json();
-            })
-            .then(data => {
-                alert('Course created successfully');
+            const courses = JSON.parse(localStorage.getItem('courses')) || [];
+            courses.push(courseData);
+            localStorage.setItem('courses', JSON.stringify(courses));
+            alert('Course created successfully');
+            fetchCourses();
+            event.target.reset();
+        }
+
+        function editCourse(index) {
+            const courses = JSON.parse(localStorage.getItem('courses')) || [];
+            const course = courses[index];
+
+            document.getElementById('name').value = course.name;
+            document.getElementById('description').value = course.description;
+            document.getElementById('subject').value = course.subject;
+            document.getElementById('credits').value = course.credits;
+
+            document.getElementById('create-course-form').removeEventListener('submit', createCourse);
+            document.getElementById('create-course-form').addEventListener('submit', function updateCourse(event) {
+                event.preventDefault();
+                course.name = document.getElementById('name').value;
+                course.description = document.getElementById('description').value;
+                course.subject = document.getElementById('subject').value;
+                course.credits = document.getElementById('credits').value;
+
+                courses[index] = course;
+                localStorage.setItem('courses', JSON.stringify(courses));
+                alert('Course updated successfully');
                 fetchCourses();
-            })
-            .catch(error => {
-                console.error('Error creating course:', error);
-                alert('Error creating course: ' + error.message);
+                event.target.reset();
+
+                document.getElementById('create-course-form').removeEventListener('submit', updateCourse);
+                document.getElementById('create-course-form').addEventListener('submit', createCourse);
             });
         }
 
-        function editCourse(courseId) {
-            // Implement the logic to edit a course
-            // You can open a modal or redirect to an edit page
-        }
-
-        function deleteCourse(courseId) {
-            fetch(`/courses/${courseId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to delete course');
-                }
-                return response.json();
-            })
-            .then(data => {
-                alert('Course deleted successfully');
-                fetchCourses();
-            })
-            .catch(error => {
-                console.error('Error deleting course:', error);
-                alert('Error deleting course: ' + error.message);
-            });
+        function deleteCourse(index) {
+            const courses = JSON.parse(localStorage.getItem('courses')) || [];
+            courses.splice(index, 1);
+            localStorage.setItem('courses', JSON.stringify(courses));
+            alert('Course deleted successfully');
+            fetchCourses();
         }
     </script>
 </body>

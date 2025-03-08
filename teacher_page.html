@@ -5,97 +5,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="index.css">
     <title>Teacher Page</title>
-    <style>
-        .course-list {
-            margin-top: 20px;
-        }
-        .course-item {
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
 <body>
+    <nav>
+        <ul>
+             <li><a href="index.html">Home</a> </li>
+             <li><a href="student_login.html">Student log in</a> </li>
+             <li><a href="teacher_login.html">Teacher log in</a> </li>
+         </ul>
+    </nav>
     <h1>Welcome to the Teacher Page</h1>
-    <form id="courseForm">
-        <label for="courseName">Course Name:</label>
-        <input type="text" id="courseName" name="courseName"><br><br>
-        <label for="courseCode">Course Code:</label>
-        <input type="text" id="courseCode" name="courseCode"><br><br>
-        <label for="courseDescription">Course Description:</label><br>
-        <textarea id="courseDescription" name="courseDescription" rows="4" cols="50"></textarea><br><br>
-        <input type="submit" value="Add Course">
+    <h2>Create a New Course</h2>
+    <form id="create-course-form">
+        <label for="name">Course Name:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required><br>
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required><br>
+        <label for="credits">Credits:</label>
+        <input type="number" id="credits" name="credits" min="1" max="6" required><br>
+        <button type="submit">Create Course</button>
     </form>
 
-    <div class="course-list" id="courseList">
-        <h2>Courses</h2>
-        <!-- Courses will be listed here -->
-    </div>
+    <h2>Manage Courses</h2>
+    <ul id="teacher-courses">
+        <!-- Courses will be dynamically populated here -->
+    </ul>
 
     <script>
-        let editMode = false;
-        let currentCourseItem = null;
-
-        document.getElementById('courseForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            if (editMode) {
-                updateCourse();
-            } else {
-                addCourse();
-            }
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchCourses();
+            document.getElementById('create-course-form').addEventListener('submit', createCourse);
         });
 
-        function addCourse() {
-            const courseName = document.getElementById('courseName').value;
-            const courseCode = document.getElementById('courseCode').value;
-            const courseDescription = document.getElementById('courseDescription').value;
-
-            const courseList = document.getElementById('courseList');
-            const courseItem = document.createElement('div');
-            courseItem.className = 'course-item';
-            courseItem.innerHTML = `
-                <strong>${courseName}</strong> (${courseCode})<br>
-                ${courseDescription}<br>
-                <button onclick="editCourse(this)">Edit</button>
-                <button onclick="deleteCourse(this)">Delete</button>
-            `;
-            courseList.appendChild(courseItem);
-
-            document.getElementById('courseForm').reset();
+        function fetchCourses() {
+            fetch('/courses')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch courses');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const courseList = document.getElementById('teacher-courses');
+                    courseList.innerHTML = '';
+                    data.forEach(course => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `${course.name} 
+                                        <button onclick="editCourse('${course._id}')">Edit</button>
+                                        <button onclick="deleteCourse('${course._id}')">Delete</button>`;
+                        courseList.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching courses:', error);
+                    alert('Error fetching courses: ' + error.message);
+                });
         }
 
-        function editCourse(button) {
-            const courseItem = button.parentElement;
-            const courseName = courseItem.querySelector('strong').innerText;
-            const courseCode = courseItem.childNodes[1].nodeValue.trim().slice(1, -1);
-            const courseDescription = courseItem.childNodes[3].nodeValue.trim();
+        function createCourse(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const courseData = {
+                name: formData.get('name'),
+                description: formData.get('description'),
+                subject: formData.get('subject'),
+                credits: formData.get('credits'),
+                createdBy: localStorage.getItem('userId') // Assuming you store the user ID in localStorage
+            };
 
-            document.getElementById('courseName').value = courseName;
-            document.getElementById('courseCode').value = courseCode;
-            document.getElementById('courseDescription').value = courseDescription;
-
-            editMode = true;
-            currentCourseItem = courseItem;
+            fetch('/courses', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(courseData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to create course');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Course created successfully');
+                fetchCourses();
+            })
+            .catch(error => {
+                console.error('Error creating course:', error);
+                alert('Error creating course: ' + error.message);
+            });
         }
 
-        function updateCourse() {
-            const courseName = document.getElementById('courseName').value;
-            const courseCode = document.getElementById('courseCode').value;
-            const courseDescription = document.getElementById('courseDescription').value;
-
-            currentCourseItem.innerHTML = `
-                <strong>${courseName}</strong> (${courseCode})<br>
-                ${courseDescription}<br>
-                <button onclick="editCourse(this)">Edit</button>
-                <button onclick="deleteCourse(this)">Delete</button>
-            `;
-
-            document.getElementById('courseForm').reset();
-            editMode = false;
-            currentCourseItem = null;
+        function editCourse(courseId) {
+            // Implement the logic to edit a course
+            // You can open a modal or redirect to an edit page
         }
 
-        function deleteCourse(button) {
-            button.parentElement.remove();
+        function deleteCourse(courseId) {
+            fetch(`/courses/${courseId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to delete course');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Course deleted successfully');
+                fetchCourses();
+            })
+            .catch(error => {
+                console.error('Error deleting course:', error);
+                alert('Error deleting course: ' + error.message);
+            });
         }
     </script>
 </body>
